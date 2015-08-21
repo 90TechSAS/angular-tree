@@ -6,7 +6,7 @@
 'use strict';
 
 angular.module('myApp', [
-'ngRoute', 'ngSanitize', 'ngTouch', 'ngAnimate',		//additional angular modules
+'ngRoute', 'ngSanitize', 'ngTouch',		//additional angular modules
 '90TechSAS.angular-tree'
 ]).
 config(['$routeProvider', '$locationProvider', '$compileProvider', function($routeProvider, $locationProvider, $compileProvider) {
