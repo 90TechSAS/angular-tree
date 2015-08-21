@@ -53,7 +53,7 @@ app.directive("zlTree", function(RecursionHelper){
         '<ul ng-if="toggle">' +
         '<div ng-if="loading" class="spinner"></div>' +
         '<li ng-if="!loading" ng-repeat="child in children">' +
-        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id})"></zl-tree>' +
+        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})"></zl-tree>' +
         '</li>' +
         '</ul>',
         compile   : function(element){
@@ -66,7 +66,7 @@ app.directive("zlTree", function(RecursionHelper){
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
                     $scope.loading = true;
-                    $scope.loadFunction({$id: $scope.root.children}).then(function(data){
+                    $scope.loadFunction({$id: $scope.root.children, $parent: $scope.root}).then(function(data){
                         $scope.children = data;
                         $scope.loading  = false;
                     })
