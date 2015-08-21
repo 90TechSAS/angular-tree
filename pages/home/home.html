@@ -1,5 +1,18 @@
-<div ng-controller='HomeCtrl'>	
+<div ng-controller='HomeCtrl'>
 
-  <zl-tree zl-tree-root="root" load-function="getBatch($id)"></zl-tree>
+    <div class="tree">
+        <zl-tree zl-tree-root="root" load-function="getBatch($id)" template="'tplte'"></zl-tree>
+    </div>
 
+    <script type="text/ng-template" id="tplte">
+        <div class="template"><strong>{{elt.label}}</strong>
+
+            <p>{{elt.name}}</p>
+
+            <p>{{elt.address}}</p>
+        </div>
+        <div class="clearfix"></div>
+    </script>
 </div>
+
+

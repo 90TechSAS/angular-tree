@@ -8,8 +8,8 @@ angular.module('myApp').controller('HomeCtrl', ['$scope', '$q', '$timeout', func
     $scope.root = makeOne(0);
 
     function makeOne(id){
-        var detail = {id: id, children: []};
-        _.times(_.random(1000), function(i){
+        var detail = {id: id, label: chance.word(), name: chance.name(), address: chance.address(), children: []};
+        _.times(_.random(3), function(i){
             detail.children.push(_.random(10000000));
         });
         return detail

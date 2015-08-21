@@ -47,13 +47,14 @@ app.factory('RecursionHelper', ['$compile', function($compile){
 app.directive("zlTree", function(RecursionHelper){
     return {
         restrict  : "E",
-        scope     : {root: '=zlTreeRoot', loadFunction: '&'},
-        template  : '<button ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button>' +
-        '<span>{{ root.id}}</span>' +
-        '<ul ng-if="toggle">' +
-        '<div ng-if="loading" class="spinner"></div>' +
-        '<li ng-if="!loading" ng-repeat="child in children">' +
-        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})"></zl-tree>' +
+        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '='},
+        template  :
+        '<div class="zl-tree-button-container"><button ng-if="elt.children.length" class="zl-tree-toggle-button" ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button></div>' +
+        '<ng-include src="template"></ng-include>' +
+        '<ul class="zl-tree-ul" ng-if="toggle">' +
+        '<div ng-if="loading" class="zl-tree-spinner"></div>' +
+        '<li class="zl-tree-li" ng-if="!loading" ng-repeat="child in children">' +
+        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template"></zl-tree>' +
         '</li>' +
         '</ul>',
         compile   : function(element){
@@ -66,7 +67,7 @@ app.directive("zlTree", function(RecursionHelper){
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
                     $scope.loading = true;
-                    $scope.loadFunction({$id: $scope.root.children, $parent: $scope.root}).then(function(data){
+                    $scope.loadFunction({$id: $scope.elt.children, $parent: $scope.elt}).then(function(data){
                         $scope.children = data;
                         $scope.loading  = false;
                     })
