@@ -1,7 +1,7 @@
 <div ng-controller='HomeCtrl'>
 
     <div class="tree">
-        <zl-tree zl-tree-root="root" load-function="getBatch($id)" template="'tplte'"></zl-tree>
+        <zl-tree zl-tree-root="root" load-function="getBatch($id)" template="'tplte'" zl-element-click="click($elt)"></zl-tree>
     </div>
 
     <script type="text/ng-template" id="tplte">

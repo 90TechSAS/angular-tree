@@ -47,10 +47,10 @@ app.factory('RecursionHelper', ['$compile', function($compile){
 app.directive("zlTree", function(RecursionHelper){
     return {
         restrict  : "E",
-        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '='},
+        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '=', zlElementClick: '&'},
         template  :
         '<div class="zl-tree-button-container"><button ng-if="elt.children.length" class="zl-tree-toggle-button" ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button></div>' +
-        '<ng-include src="template"></ng-include>' +
+        '<div ng-click="zlElementClick({$elt: elt})"><ng-include src="template" ></ng-include></div>' +
         '<ul class="zl-tree-ul" ng-if="toggle">' +
         '<div ng-if="loading" class="zl-tree-spinner"></div>' +
         '<li class="zl-tree-li" ng-if="!loading" ng-repeat="child in children">' +

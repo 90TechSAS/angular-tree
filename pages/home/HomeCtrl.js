@@ -15,6 +15,10 @@ angular.module('myApp').controller('HomeCtrl', ['$scope', '$q', '$timeout', func
         return detail
     }
 
+    $scope.click= function(aaa){
+        console.info(aaa);
+    }
+
     $scope.getBatch = function(ids){
         console.info(ids);
         var def = $q.defer();
