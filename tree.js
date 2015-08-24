@@ -72,8 +72,22 @@ app.directive("zlTree", function(RecursionHelper){
             $scope.checked = function(elt){
                 return _.contains($scope.zlSelected, elt[idField]);
             };
+
+            function extractChildrenIds(elt){
+                return _.map(elt.children, function(c){
+                    if (typeof c === 'object'){
+                        return c[idField];
+                    }
+                    return c;
+                });
+            }
+
             $scope.addChildren = function(elt){
-                $scope.zlSelected = _.union($scope.zlSelected, elt.children);
+                $scope.zlSelected = _.union($scope.zlSelected, extractChildrenIds(elt));
+            };
+
+            $scope.removeChildren = function(elt){
+                $scope.zlSelected = _.difference($scope.zlSelected, extractChildrenIds(elt));
             };
 
             $scope.toggleMe = function(){
