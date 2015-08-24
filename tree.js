@@ -55,7 +55,7 @@ app.directive("zlTree", function(RecursionHelper){
         '<ul class="zl-tree-ul" ng-if="toggle">' +
         '<div ng-if="loading" class="zl-tree-spinner"></div>' +
         '<li class="zl-tree-li" ng-if="!loading" ng-repeat="child in children">' +
-        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template" zl-selected="zlSelected"></zl-tree>' +
+        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template" zl-selected="zlSelected" id-field="idField"></zl-tree>' +
         '</li>' +
         '</ul>',
         compile   : RecursionHelper.compile,
@@ -64,7 +64,7 @@ app.directive("zlTree", function(RecursionHelper){
             var idField = $scope.idField || 'id';
             $scope.checkme = function(elt){
                 if (_.contains($scope.zlSelected, elt[idField])){
-                    _.remove($scope.zlSelected, elt[idField]);
+                    _.pull($scope.zlSelected, elt[idField]);
                 } else {
                     $scope.zlSelected.push(elt[idField]);
                 }
