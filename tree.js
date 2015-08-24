@@ -55,7 +55,7 @@ app.directive("zlTree", function(RecursionHelper){
         '<ul class="zl-tree-ul" ng-if="toggle">' +
         '<div ng-if="loading" class="zl-tree-spinner"></div>' +
         '<li class="zl-tree-li" ng-if="!loading" ng-repeat="child in children">' +
-        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template" zl-selected="zlSelected" id-field="{{idField}}" select-callback="selectCallback({$elt: elt})"></zl-tree>' +
+        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template" zl-selected="zlSelected" id-field="{{idField}}" select-callback="selectCallback({$elt: $elt})"></zl-tree>' +
         '</li>' +
         '</ul>',
         compile   : RecursionHelper.compile,
