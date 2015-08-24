@@ -73,7 +73,7 @@ app.directive("zlTree", function(RecursionHelper){
                 return _.contains($scope.zlSelected, elt[idField]);
             };
             $scope.addChildren = function(elt){
-                $scope.zlSelected.concat(elt.children);
+                $scope.zlSelected = _.union($scope.zlSelected, elt.children);
             };
 
             $scope.toggleMe = function(){
