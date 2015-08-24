@@ -47,22 +47,31 @@ app.factory('RecursionHelper', ['$compile', function($compile){
 app.directive("zlTree", function(RecursionHelper){
     return {
         restrict  : "E",
-        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '=', zlElementClick: '&'},
+        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '=', zlSelected: '='},
         template  :
         '<div class="zl-tree-button-container"><button ng-if="elt.children.length" class="zl-tree-toggle-button" ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button></div>' +
-        '<div ng-click="zlElementClick({$elt: elt})"><ng-include src="template" ></ng-include></div>' +
+        '<input type="checkbox" ng-click="checkme(elt)" ng-checked="checked(elt)">' +
+        '<ng-include src="template" ></ng-include>' +
         '<ul class="zl-tree-ul" ng-if="toggle">' +
         '<div ng-if="loading" class="zl-tree-spinner"></div>' +
         '<li class="zl-tree-li" ng-if="!loading" ng-repeat="child in children">' +
-        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template"></zl-tree>' +
+        '<zl-tree zl-tree-root="child" load-function="loadFunction({$id: $id, $parent: $parent})" template="template" zl-selected="zlSelected"></zl-tree>' +
         '</li>' +
         '</ul>',
-        compile   : function(element){
-            // Use the compile function from the RecursionHelper,
-            // And return the linking function(s) which it returns
-            return RecursionHelper.compile(element);
-        },
+        compile   : RecursionHelper.compile,
         controller: function($scope){
+            $scope.zlSelected = $scope.zlSelected || [];
+            $scope.checkme = function(elt){
+                if (_.contains($scope.zlSelected, elt.id)){
+                    _.remove($scope.zlSelected, elt.id);
+                } else {
+                    $scope.zlSelected.push(elt.id);
+                }
+                console.info($scope.zlSelected);
+            };
+            $scope.checked = function(elt){
+                return _.contains($scope.zlSelected, elt.id);
+            }
             $scope.toggleMe = function(){
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
