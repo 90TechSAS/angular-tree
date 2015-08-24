@@ -47,7 +47,7 @@ app.factory('RecursionHelper', ['$compile', function($compile){
 app.directive("zlTree", function(RecursionHelper){
     return {
         restrict  : "E",
-        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '=', zlSelected: '='},
+        scope     : {elt: '=zlTreeRoot', loadFunction: '&', template: '=', zlSelected: '=', idField: '@'},
         template  :
         '<div class="zl-tree-button-container"><button ng-if="elt.children.length" class="zl-tree-toggle-button" ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button></div>' +
         '<input class="zl-tree-checkbox" type="checkbox" ng-click="checkme(elt)" ng-checked="checked(elt)">' +
@@ -61,17 +61,17 @@ app.directive("zlTree", function(RecursionHelper){
         compile   : RecursionHelper.compile,
         controller: function($scope){
             $scope.zlSelected = $scope.zlSelected || [];
+            var idField = $scope.ifField || 'id';
             $scope.checkme = function(elt){
                 if (_.contains($scope.zlSelected, elt.id)){
-                    _.remove($scope.zlSelected, elt.id);
+                    _.remove($scope.zlSelected, elt[idField]);
                 } else {
-                    $scope.zlSelected.push(elt.id);
+                    $scope.zlSelected.push(elt[idField]);
                 }
-                console.info($scope.zlSelected);
             };
             $scope.checked = function(elt){
-                return _.contains($scope.zlSelected, elt.id);
-            }
+                return _.contains($scope.zlSelected, elt[idField]);
+            };
             $scope.toggleMe = function(){
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
