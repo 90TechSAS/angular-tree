@@ -72,6 +72,10 @@ app.directive("zlTree", function(RecursionHelper){
             $scope.checked = function(elt){
                 return _.contains($scope.zlSelected, elt[idField]);
             };
+            $scope.addChildren = function(elt){
+                $scope.zlSelected.concat(elt.children);
+            };
+
             $scope.toggleMe = function(){
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
