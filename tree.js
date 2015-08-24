@@ -61,9 +61,9 @@ app.directive("zlTree", function(RecursionHelper){
         compile   : RecursionHelper.compile,
         controller: function($scope){
             $scope.zlSelected = $scope.zlSelected || [];
-            var idField = $scope.ifField || 'id';
+            var idField = $scope.idField || 'id';
             $scope.checkme = function(elt){
-                if (_.contains($scope.zlSelected, elt.id)){
+                if (_.contains($scope.zlSelected, elt[idField])){
                     _.remove($scope.zlSelected, elt[idField]);
                 } else {
                     $scope.zlSelected.push(elt[idField]);
