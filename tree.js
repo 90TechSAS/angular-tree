@@ -47,7 +47,7 @@ app.factory('RecursionHelper', ['$compile', function($compile){
 app.directive("zlTree", function(RecursionHelper){
     return {
         restrict  : "E",
-        scope     : {elt: '=zlTreeRoot', loadFunction: '&', selectCallback: '&', template: '=', zlSelected: '=', idField: '@'},
+        scope     : {elt: '=zlTreeRoot', loadFunction: '&', selectCallback: '&', template: '=', zlSelected: '=', zlScope:'=', idField: '@'},
         template  :
         '<div class="zl-tree-button-container"><button ng-if="elt.children.length" class="zl-tree-toggle-button" ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button></div>' +
         '<input class="zl-tree-checkbox" type="checkbox" ng-click="checkme(elt)" ng-checked="checked(elt)">' +
