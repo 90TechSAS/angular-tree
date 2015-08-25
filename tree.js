@@ -102,6 +102,7 @@ app.directive("zlTree", function(RecursionHelper){
             $scope.loadChildren = function(){
                 $scope.loadFunction({$id: $scope.elt.children, $parent: $scope.elt}).then(function(data){
                     $scope.children = data;
+                    $scope.element.children = _.pluck(data, idField);
                     $scope.loading  = false;
                 })
             };
