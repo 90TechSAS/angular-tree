@@ -91,14 +91,18 @@ app.directive("zlTree", function(RecursionHelper){
                 $scope.zlSelected = _.difference($scope.zlSelected, extractChildrenIds(elt));
             };
 
+            $scope.loadChildren = function(){
+                $scope.loadFunction({$id: $scope.elt.children, $parent: $scope.elt}).then(function(data){
+                    $scope.children = data;
+                    $scope.loading  = false;
+                })
+            };
+
             $scope.toggleMe = function(){
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
                     $scope.loading = true;
-                    $scope.loadFunction({$id: $scope.elt.children, $parent: $scope.elt}).then(function(data){
-                        $scope.children = data;
-                        $scope.loading  = false;
-                    })
+                    $scope.loadChildren();
                 }
             }
         }
