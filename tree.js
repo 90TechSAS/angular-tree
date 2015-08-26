@@ -74,7 +74,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                         'load-function="loadFunction({$id: $id, $parent: $parent})" ' +
                         'columns="columns" depth="depth+1"' +
                         'zl-selected="zlSelected"' +
-                        'id-field="idField">' +
+                        'id-field="{{idField}}">' +
                         '</tr>';
                     $compile(tplte)(scope, function(clone){
                         element.after(clone);
