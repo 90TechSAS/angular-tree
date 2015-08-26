@@ -11,6 +11,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
         template  : '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
         '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
         '<button class="zl-tree-toggle-button"  ng-class="{\'open\': toggle}"  ng-if="elt.children.length"></button>' +
+        '<div class="zl-tree-no-children" ng-if="!elt.children.length"></div>' +
         '</td>' +
         '<td ng-repeat="col in columns">{{elt[col]}}</td></tr>',
         controller: function($scope){

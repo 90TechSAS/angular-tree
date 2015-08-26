@@ -10,6 +10,11 @@
     content: "\e258";
 }
 
+.zl-tree-no-children:before {
+    content: "#"
+
+}
+
 .checked {
     background-color: teal !important;
 }
