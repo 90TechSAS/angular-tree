@@ -70,7 +70,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
             return {
                 post: function(scope, element){
 
-                    var tplte = '<tr ng-if="loading"><td colspan="{{columns.length + 1}}"><div class="zl-tree-loading"></div></td></tr>' +
+                    var tplte = '<tr ng-if="loading"><td style="text-align:center;" colspan="{{columns.length + 1}}"><div class="zl-tree-loading"></div></td></tr>' +
                         '<tr ng-if="!loading && toggle" ' +
                         'ng-repeat="child in children" ' +
                         'zl-tree-row zl-tree-root="child" ' +
