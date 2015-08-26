@@ -6,7 +6,7 @@ var app = angular.module('90TechSAS.angular-tree', []);
 app.directive("zlTreeRow", ['$compile', function($compile){
     return {
         restrict  : 'A',
-        scope     : {elt: "=zlTreeRoot", loadFunction: '&', columns: '=', depth: '=', zlSelected: '=', idField: '='},
+        scope     : {elt: "=zlTreeRoot", loadFunction: '&', columns: '=', depth: '=', zlSelected: '=', idField: '@'},
         replace: true,
         template  : '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
         '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
