@@ -1,17 +1,24 @@
 <div ng-controller='HomeCtrl'>
 
-    <div class="tree">
-        <zl-tree zl-tree-root="root" load-function="getBatch($id)" template="'tplte'" ></zl-tree>
-    </div>
+
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th></th>
+                <th>Label</th>
+                <th>Name</th>
+                <th>Address</th>
+            </tr>
+        </thead>
+        <tbody>
+        <tr zl-tree-row zl-tree-root="root" load-function="getBatch($id)" columns="['label', 'name', 'address']" ></tr>
+        </tbody>
+    </table>
 
     <script type="text/ng-template" id="tplte">
-        <div class="template"><strong>{{elt.label}}</strong>
-
-            <p>{{elt.name}}</p>
-
-            <p>{{elt.address}}</p>
-        </div>
-        <div class="clearfix"></div>
+        <td>{{elt.label}}</td>
+        <td>{{elt.name}}</td>
+        <td>{{elt.address}}</td>
     </script>
 </div>
 

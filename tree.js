@@ -2,85 +2,30 @@
 
 var app = angular.module('90TechSAS.angular-tree', []);
 
-app.factory('RecursionHelper', ['$compile', function($compile){
+
+app.directive("zlTreeRow", ['$compile', function($compile){
     return {
-        /**
-         * Manually compiles the element, fixing the recursion loop.
-         * @param element
-         * @param [link] A post-link function, or an object with function(s) registered via pre and post properties.
-         * @returns An object containing the linking functions.
-         */
-        compile: function(element, link){
-            // Normalize the link parameter
-            if (angular.isFunction(link)){
-                link = {post: link};
-            }
-
-            // Break the recursion loop by removing the contents
-            var contents = element.contents().remove();
-            var compiledContents;
-            return {
-                pre : (link && link.pre) ? link.pre : null,
-                /**
-                 * Compiles and re-adds the contents
-                 */
-                post: function(scope, element){
-                    // Compile the contents
-                    if (!compiledContents){
-                        compiledContents = $compile(contents);
-                    }
-                    // Re-add the compiled contents to the element
-                    compiledContents(scope, function(clone){
-                        element.append(clone);
-                    });
-
-                    // Call the post-linking function, if any
-                    if (link && link.post){
-                        link.post.apply(null, arguments);
-                    }
-                }
-            };
-        }
-    };
-}]);
-
-app.directive("zlTree", function(RecursionHelper){
-    return {
-        restrict  : "E",
-        scope     : {elt: '=zlTreeRoot', loadFunction: '&', selectCallback: '&', template: '=', zlSelected: '=', zlScope:'=', idField: '@'},
-        template  :
-        '<div class="zl-tree-line-container">' +
-        '<div class="zl-tree-button-container"><button ng-if="elt.children.length" class="zl-tree-toggle-button" ng-click="toggleMe()">{{toggle ? \'-\' : \'+\'}}</button></div>' +
-        '<input class="zl-tree-checkbox" type="checkbox" ng-click="checkme(elt)" ng-checked="checked(elt)">' +
-        '<ng-include src="template" ></ng-include>' +
-        '</div>' +
-        '<ul class="zl-tree-ul" ng-if="toggle">' +
-        '<div ng-if="loading" class="zl-tree-spinner"></div>' +
-        '<li class="zl-tree-li" ng-if="!loading" ng-repeat="child in children">' +
-        '<zl-tree ' +
-            'zl-tree-root="child" ' +
-            'load-function="loadFunction({$id: $id, $parent: $parent})" ' +
-            'template="template" ' +
-            'zl-selected="zlSelected" ' +
-            'id-field="{{idField}}" ' +
-            'select-callback="selectCallback({$elt: $elt})"' +
-            'zl-scope="zlScope"' +
-        '></zl-tree>' +
-        '</li>' +
-        '</ul>',
-        compile   : RecursionHelper.compile,
+        restrict  : 'A',
+        scope     : {elt: "=zlTreeRoot", loadFunction: '&', columns: '=', depth: '=', zlSelected: '='},
+        replace: true,
+        template  : '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
+        '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
+        '<button class="zl-tree-toggle-button"  ng-class="{\'open\': toggle}"  ng-if="elt.children.length"></button>' +
+        '</td>' +
+        '<td ng-repeat="col in columns">{{elt[col]}}</td></tr>',
         controller: function($scope){
-            $scope.zlSelected = $scope.zlSelected || [];
-            var idField = $scope.idField || 'id';
-            $scope.checkme = function(elt){
+            $scope.zlSelected = $scope.zlSelected || [];
+            $scope.depth      = $scope.depth || 0;
+            var idField       = $scope.idField || 'id';
+            $scope.checkme    = function(elt){
                 if (_.contains($scope.zlSelected, elt[idField])){
                     _.pull($scope.zlSelected, elt[idField]);
-                } else {
+                } else{
                     $scope.zlSelected.push(elt[idField]);
                     $scope.selectCallback && $scope.selectCallback({$elt: elt});
                 }
             };
-            $scope.checked = function(elt){
+            $scope.checked    = function(elt){
                 return _.contains($scope.zlSelected, elt[idField]);
             };
 
@@ -103,9 +48,9 @@ app.directive("zlTree", function(RecursionHelper){
 
             $scope.loadChildren = function(){
                 $scope.loadFunction({$id: $scope.elt.children, $parent: $scope.elt}).then(function(data){
-                    $scope.children = data;
+                    $scope.children     = data;
                     $scope.elt.children = _.pluck(data, idField);
-                    $scope.loading  = false;
+                    $scope.loading      = false;
                 })
             };
 
@@ -116,6 +61,27 @@ app.directive("zlTree", function(RecursionHelper){
                     $scope.loadChildren();
                 }
             }
+        },
+        compile   : function(){
+            return {
+                post: function(scope, element){
+
+                    var tplte = '<tr ng-if="loading"><td colspan="{{columns.length + 1}}" class="zl-tree-loading"></td></tr>' +
+                        '<tr ng-if="!loading && toggle" ' +
+                        'ng-repeat="child in children" ' +
+                        'zl-tree-row zl-tree-root="child" ' +
+                        'load-function="loadFunction({$id: $id, $parent: $parent})" ' +
+                        'columns="columns" depth="depth+1"' +
+                        'zl-selected="zlSelected">' +
+                        '</tr>';
+                    $compile(tplte)(scope, function(clone){
+                        element.after(clone);
+                        element.addClass('depth-' + scope.depth);
+                    });
+                }
+            }
         }
-    };
-});
+    }
+
+
+}]);

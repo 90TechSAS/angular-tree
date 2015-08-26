@@ -9,7 +9,7 @@ angular.module('myApp').controller('HomeCtrl', ['$scope', '$q', '$timeout', func
 
     function makeOne(id){
         var detail = {id: id, label: chance.word(), name: chance.name(), address: chance.address(), children: []};
-        _.times(_.random(3), function(i){
+        _.times(_.random(10), function(i){
             detail.children.push(_.random(10000000));
         });
         return detail
