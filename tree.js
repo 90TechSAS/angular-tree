@@ -56,6 +56,9 @@ app.directive("zlTreeRow", ['$compile', function($compile){
             };
 
             $scope.toggleMe = function(){
+                if (!$scope.elt.children.length){
+                    return;
+                }
                 $scope.toggle = !$scope.toggle;
                 if ($scope.toggle && !$scope.children){
                     $scope.loading = true;
