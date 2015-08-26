@@ -6,7 +6,7 @@ var app = angular.module('90TechSAS.angular-tree', []);
 app.directive("zlTreeRow", ['$compile', function($compile){
     return {
         restrict  : 'A',
-        scope     : {elt: "=zlTreeRoot", loadFunction: '&', columns: '=', depth: '=', zlSelected: '=', idField: '@'},
+        scope     : {elt: "=zlTreeRoot", loadFunction: '&', columns: '=', depth: '=', zlSelected: '=', idField: '@', selectCallback: '&'},
         replace: true,
         template  : '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
         '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
@@ -78,6 +78,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                         'columns="columns" depth="depth+1"' +
                         'zl-selected="zlSelected"' +
                         'id-field="{{idField}}">' +
+                        'select-callback="selectCallback({$elt: $elt})"' +
                         '</tr>';
                     $compile(tplte)(scope, function(clone){
                         element.after(clone);
