@@ -14,7 +14,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
         '<div class="zl-tree-no-children" ng-if="!elt.children.length"></div>' +
         '</td>' +
         '<td ng-repeat="col in columns">{{elt[col]}}</td></tr>',
-        controller: function($scope){
+        controller: ['$scope', function($scope){
             $scope.zlSelected = $scope.zlSelected || [];
             $scope.depth      = $scope.depth || 0;
             var idField       = $scope.idField || 'id';
@@ -65,7 +65,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                     $scope.loadChildren();
                 }
             }
-        },
+        }],
         compile   : function(){
             return {
                 post: function(scope, element){
