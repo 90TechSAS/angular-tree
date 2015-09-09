@@ -6,14 +6,7 @@ var app = angular.module('90TechSAS.angular-tree', []);
 app.directive("zlTreeRow", ['$compile', function($compile){
     return {
         restrict  : 'A',
-        scope     : {elt: "=zlTreeRoot", loadFunction: '&', columns: '=', depth: '=', zlSelected: '=', idField: '@', selectCallback: '&'},
-        replace: true,
-        template  : '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
-        '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
-        '<button class="zl-tree-toggle-button"  ng-class="{\'open\': toggle}"  ng-if="elt.children.length"></button>' +
-        '<div class="zl-tree-no-children" ng-if="!elt.children.length"></div>' +
-        '</td>' +
-        '<td ng-repeat="col in columns">{{elt[col]}}</td></tr>',
+        scope     : {elt: "=zlTreeRoot", loadFunction: '&', depth: '=', zlSelected: '=', idField: '@', selectCallback: '&'},
         controller: ['$scope', function($scope){
             $scope.zlSelected = $scope.zlSelected || [];
             $scope.depth      = $scope.depth || 0;
@@ -66,23 +59,35 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                 }
             }
         }],
-        compile   : function(){
+        compile   : function(elt){
+            var colspan = _.filter(elt.children(), 'tagName', 'TD').length + 1;
+
             return {
                 post: function(scope, element){
 
-                    var tplte = '<tr ng-if="loading"><td style="text-align:center;" colspan="{{columns.length + 1}}"><div class="zl-tree-loading"></div></td></tr>' +
+                    var tplte =
+                            '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
+                        '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
+                        '<button class="zl-tree-toggle-button"  ng-class="{\'open\': toggle}"  ng-if="elt.children.length"></button>' +
+                        '<div class="zl-tree-no-children" ng-if="!elt.children.length"></div>' +
+                        '</td>' +
+                            elt.html() +
+                        '</tr>'+
+                            '<tr ng-if="loading"><td style="text-align:center;" colspan="'+ colspan +'"><div class="zl-tree-loading"></div></td></tr>' +
                         '<tr ng-if="!loading && toggle" ' +
                         'ng-repeat="child in children" ' +
                         'zl-tree-row zl-tree-root="child" ' +
                         'load-function="loadFunction({$id: $id, $parent: $parent})" ' +
-                        'columns="columns" depth="depth+1"' +
+                        'depth="depth+1"' +
                         'zl-selected="zlSelected"' +
                         'id-field="{{idField}}"' +
                         'select-callback="selectCallback({$elt: $elt})">' +
+                                elt.html();
                         '</tr>';
+
                     $compile(tplte)(scope, function(clone){
-                        element.after(clone);
-                        element.addClass('depth-' + scope.depth);
+                        element.replaceWith(clone);
+                        clone.addClass('depth-' + scope.depth);
                     });
                 }
             }
