@@ -6,7 +6,7 @@ var app = angular.module('90TechSAS.angular-tree', []);
 app.directive("zlTreeRow", ['$compile', function($compile){
     return {
         restrict  : 'A',
-        scope     : {elt: "=zlTreeRoot", loadFunction: '&', depth: '=', zlSelected: '=', idField: '@', selectCallback: '&'},
+        scope     : {elt: "=zlTreeRoot", loadFunction: '&', toggled:'=toggle', depth: '=', zlSelected: '=', idField: '@', selectCallback: '&'},
         controller: ['$scope', function($scope){
             $scope.zlSelected = $scope.zlSelected || [];
             $scope.depth      = $scope.depth || 0;
@@ -50,6 +50,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
 
             $scope.toggleMe = function(){
                 if (!$scope.elt.children.length){
+                    $scope.checkme($scope.elt);
                     return;
                 }
                 $scope.toggle = !$scope.toggle;
@@ -66,7 +67,9 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                 post: function(scope, element){
 
                     var tplte =
-                            '<tr ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}">' +
+                            '<tr ng-if="toggled" ng-click="checkme(elt)" ng-class="{\'checked\': checked(elt)}"' +
+                            'class="depth-' + scope.depth + '"' +
+                            '>' +
                         '<td ng-click="toggleMe(); $event.stopImmediatePropagation()">' +
                         '<button class="zl-tree-toggle-button"  ng-class="{\'open\': toggle}"  ng-if="elt.children.length"></button>' +
                         '<div class="zl-tree-no-children" ng-if="!elt.children.length"></div>' +
@@ -74,20 +77,21 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                             elt.html() +
                         '</tr>'+
                             '<tr ng-if="loading"><td style="text-align:center;" colspan="'+ colspan +'"><div class="zl-tree-loading"></div></td></tr>' +
-                        '<tr ng-if="!loading && toggle" ' +
+                        '<tr ' +
                         'ng-repeat="child in children" ' +
                         'zl-tree-row zl-tree-root="child" ' +
                         'load-function="loadFunction({$id: $id, $parent: $parent})" ' +
                         'depth="depth+1"' +
                         'zl-selected="zlSelected"' +
                         'id-field="{{idField}}"' +
+                            'toggle="!loading && toggle"' +
                         'select-callback="selectCallback({$elt: $elt})">' +
                                 elt.html();
                         '</tr>';
 
                     $compile(tplte)(scope, function(clone){
                         element.replaceWith(clone);
-                        clone.addClass('depth-' + scope.depth);
+                   //     clone.addClass('depth-' + scope.depth);
                     });
                 }
             }

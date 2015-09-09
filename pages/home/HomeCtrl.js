@@ -6,6 +6,7 @@
 angular.module('myApp').controller('HomeCtrl', ['$scope', '$q', '$timeout', function($scope, $q, $timeout){
 
     $scope.root = makeOne(0);
+    $scope.toggle = true;
 
     function makeOne(id){
         var detail = {id: id, label: chance.word(), name: chance.name(), address: chance.address(), children: []};
