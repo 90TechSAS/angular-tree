@@ -84,7 +84,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                         'depth="depth+1"' +
                         'zl-selected="zlSelected"' +
                         'id-field="{{idField}}"' +
-                            'toggle="!loading && toggle"' +
+                            'toggle="!loading && toggled && toggle"' +
                         'select-callback="selectCallback({$elt: $elt})">' +
                                 elt.html();
                         '</tr>';
