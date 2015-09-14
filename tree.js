@@ -8,10 +8,15 @@ app.directive("zlTreeRow", ['$compile', function($compile){
         restrict  : 'A',
         scope     : {elt: "=zlTreeRoot", loadFunction: '&', toggled:'=toggle', depth: '=', zlSelected: '=', idField: '@', selectCallback: '&'},
         controller: ['$scope', function($scope){
-            $scope.zlSelected = $scope.zlSelected || [];
+            $scope.zlSelected = $scope.zlSelected;
             $scope.depth      = $scope.depth || 0;
             var idField       = $scope.idField || 'id';
             $scope.checkme    = function(elt){
+                if (!$scope.zlSelected){
+                    $scope.selectCallback && $scope.selectCallback({$elt: elt});
+                    return;
+                }
+
                 if (_.contains($scope.zlSelected, elt[idField])){
                     _.pull($scope.zlSelected, elt[idField]);
                 } else{
@@ -20,6 +25,7 @@ app.directive("zlTreeRow", ['$compile', function($compile){
                 }
             };
             $scope.checked    = function(elt){
+                if (!$scope.zlSelected) return;
                 return _.contains($scope.zlSelected, elt[idField]);
             };
 
